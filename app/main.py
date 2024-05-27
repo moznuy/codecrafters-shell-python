@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import subprocess
 import sys
 
 
@@ -17,7 +18,7 @@ def cmd_echo(*params):
     sys.stdout.flush()
 
 
-def try_find_executable(path: os.PathLike) -> str | None:
+def try_find_executable(path: str) -> str | None:
     env_path = os.environ.get("PATH", "")
     env_path_list = env_path.split(os.pathsep)
     for check_path in env_path_list:
@@ -56,11 +57,19 @@ def main():
 
         command, params = cmd[0], cmd[1:]
         fn = COMMAND_MAP.get(command)
-        if fn is None:
-            sys.stderr.write(f"{command}: command not found\n")
-            sys.stderr.flush()
+        if fn is not None:
+            fn(*params)
             continue
-        fn(*params)
+
+        if executable := try_find_executable(command):
+            args = [executable] + params
+            handle = subprocess.Popen(args)
+            handle.wait()
+            continue
+
+        sys.stderr.write(f"{command}: command not found\n")
+        sys.stderr.flush()
+        continue
 
 
 if __name__ == "__main__":
