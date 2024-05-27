@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+import os
 import sys
 
 
@@ -14,10 +17,22 @@ def cmd_echo(*params):
     sys.stdout.flush()
 
 
+def try_find_executable(path: os.PathLike) -> str | None:
+    env_path = os.environ.get("PATH", "")
+    env_path_list = env_path.split(os.pathsep)
+    for check_path in env_path_list:
+        check_exec = os.path.join(check_path, path)
+        if os.path.isfile(check_exec):
+            return check_exec
+    return None
+
+
 def cmd_type(*params):
     for param in params:
         if param in COMMAND_MAP:
             sys.stdout.write(f"{param} is a shell builtin\n")
+        elif executable := try_find_executable(param):
+            sys.stdout.write(f"{param} is {executable}\n")
         else:
             sys.stdout.write(f"{param} not found\n")
     sys.stdout.flush()
