@@ -8,7 +8,16 @@ def cmd_exit(*params):
     sys.exit(exit_code)
 
 
-COMMAND_MAP = {"exit": cmd_exit}
+def echo(*params):
+    sys.stdout.write(" ".join(params))
+    sys.stdout.write("\n")
+    sys.stdout.flush()
+
+
+COMMAND_MAP = {
+    "exit": cmd_exit,
+    "echo": echo,
+}
 
 
 def main():
