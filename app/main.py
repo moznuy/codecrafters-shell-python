@@ -8,15 +8,25 @@ def cmd_exit(*params):
     sys.exit(exit_code)
 
 
-def echo(*params):
+def cmd_echo(*params):
     sys.stdout.write(" ".join(params))
     sys.stdout.write("\n")
     sys.stdout.flush()
 
 
+def cmd_type(*params):
+    for param in params:
+        if param in COMMAND_MAP:
+            sys.stdout.write(f"{param} is a shell builtin\n")
+        else:
+            sys.stdout.write(f"{param} not found\n")
+    sys.stdout.flush()
+
+
 COMMAND_MAP = {
     "exit": cmd_exit,
-    "echo": echo,
+    "echo": cmd_echo,
+    "type": cmd_type,
 }
 
 
