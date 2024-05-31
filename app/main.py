@@ -52,9 +52,9 @@ def cmd_cd(*params):
     # TODO: too many arguments
     path = os.path.expanduser(to)
     if not os.path.exists(path):
-        # TODO: stderr
-        sys.stdout.write(f"cd: {path}: No such file or directory\n")
-        sys.stdout.flush()
+        # TODO: cd: {path}:
+        sys.stderr.write(f"{path}: No such file or directory\n")
+        sys.stderr.flush()
         return
     os.chdir(path)
 
