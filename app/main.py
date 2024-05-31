@@ -39,10 +39,16 @@ def cmd_type(*params):
     sys.stdout.flush()
 
 
+def cmd_pwd(*params):
+    sys.stdout.write(os.getcwd() + "\n")
+    sys.stdout.flush()
+
+
 COMMAND_MAP = {
     "exit": cmd_exit,
     "echo": cmd_echo,
     "type": cmd_type,
+    "pwd": cmd_pwd,
 }
 
 
