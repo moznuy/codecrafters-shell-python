@@ -53,6 +53,7 @@ def cmd_cd(*params):
     path = os.path.expanduser(to)
     if not os.path.exists(path):
         sys.stderr.write(f"cd: {path}: No such file or directory\n")
+        sys.stderr.flush()
         return
     os.chdir(path)
 
