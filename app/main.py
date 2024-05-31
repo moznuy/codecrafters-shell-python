@@ -35,7 +35,8 @@ def cmd_type(*params):
         elif executable := try_find_executable(param):
             sys.stdout.write(f"{param} is {executable}\n")
         else:
-            sys.stdout.write(f"{param} not found\n")
+            sys.stderr.write(f"{param} not found\n")
+            sys.stderr.flush()
     sys.stdout.flush()
 
 
@@ -44,11 +45,24 @@ def cmd_pwd(*params):
     sys.stdout.flush()
 
 
+def cmd_cd(*params):
+    to = "~"
+    if params:
+        to = params[0]
+    # TODO: too many arguments
+    path = os.path.expanduser(to)
+    if not os.path.exists(path):
+        sys.stderr.write(f"cd: {path}: No such file or directory\n")
+        return
+    os.chdir(path)
+
+
 COMMAND_MAP = {
     "exit": cmd_exit,
     "echo": cmd_echo,
     "type": cmd_type,
     "pwd": cmd_pwd,
+    "cd": cmd_cd,
 }
 
 
